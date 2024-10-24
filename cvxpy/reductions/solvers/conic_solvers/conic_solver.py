@@ -25,6 +25,8 @@ from cvxpy.reductions.dcp2cone.cone_matrix_stuffing import ParamConeProg
 from cvxpy.reductions.solution import Solution, failure_solution
 from cvxpy.reductions.solvers import utilities
 from cvxpy.reductions.solvers.solver import Solver
+from cvxpy.reductions.matrix_stuffing import flatten_variable_names
+
 
 # NOTE(akshayka): Small changes to this file can lead to drastic
 # performance regressions. If you are making a change to this file,
@@ -365,4 +367,5 @@ class ConicSolver(Solver):
         inv_data[s.OFFSET] = d
         data[s.A] = -A
         data[s.B] = b
+        data['var_names'] = flatten_variable_names(problem.variables)
         return data, inv_data

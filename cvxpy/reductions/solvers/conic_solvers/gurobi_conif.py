@@ -183,7 +183,7 @@ class GUROBI(ConicSolver):
             variables.append(
                 model.addVar(
                     obj=c[i],
-                    name="x_%d" % i,
+                    name=data['var_names'][i],
                     vtype=vtype,
                     # Gurobi's default LB is 0 (WHY???)
                     lb=-gurobipy.GRB.INFINITY,

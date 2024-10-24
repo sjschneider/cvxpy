@@ -24,6 +24,7 @@ from cvxpy.reductions.qp2quad_form.qp_matrix_stuffing import (
     ConeDims,
     ParamQuadProg,
 )
+from cvxpy.reductions.matrix_stuffing import flatten_variable_names
 from cvxpy.reductions.solvers.solver import Solver
 from cvxpy.reductions.utilities import group_constraints
 
@@ -109,5 +110,6 @@ class QpSolver(Solver):
         data['n_var'] = n
         data['n_eq'] = A.shape[0]
         data['n_ineq'] = F.shape[0]
+        data['var_names'] = flatten_variable_names(problem.variables)
 
         return data, inv_data

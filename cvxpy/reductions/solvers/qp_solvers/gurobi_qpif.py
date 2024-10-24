@@ -164,7 +164,9 @@ class GUROBI(QpSolver):
         x_grb = model.addVars(int(n),
                               ub={i: grb.GRB.INFINITY for i in range(n)},
                               lb={i: -grb.GRB.INFINITY for i in range(n)},
-                              vtype=vtypes)
+                              vtype=vtypes,
+                              name=data['var_names'],
+                              )
 
         if warm_start and solver_cache is not None \
                 and self.name() in solver_cache:

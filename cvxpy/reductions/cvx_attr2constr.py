@@ -147,7 +147,7 @@ class CvxAttr2Constr(Reduction):
                 if attributes_present([var], SYMMETRIC_ATTRIBUTES):
                     n = var.shape[0]
                     shape = (n*(n+1)//2, 1)
-                    upper_tri = Variable(shape, var_id=var.id, **new_attr)
+                    upper_tri = Variable(shape, var_id=var.id, **new_attr, name=var.name() + "_red")
                     upper_tri.set_variable_of_provenance(var)
                     id2new_var[var.id] = upper_tri
                     fill_coeff = Constant(upper_tri_to_full(n))
@@ -155,7 +155,7 @@ class CvxAttr2Constr(Reduction):
                     obj = reshape(full_mat, (n, n), order='F')
                 elif var.attributes['sparsity']:
                     n = len(var.sparse_idx[0])
-                    sparse_var = Variable(n, var_id=var.id, **new_attr)
+                    sparse_var = Variable(n, var_id=var.id, **new_attr, name=var.name() + "_red")
                     sparse_var.set_variable_of_provenance(var)
                     id2new_var[var.id] = sparse_var
                     row_idx = np.ravel_multi_index(var.sparse_idx, var.shape, order='F')
@@ -165,12 +165,12 @@ class CvxAttr2Constr(Reduction):
                                                     name="sparse_coeff")
                     obj = reshape(coeff_matrix @ sparse_var, var.shape, order='F')
                 elif var.attributes['diag']:
-                    diag_var = Variable(var.shape[0], var_id=var.id, **new_attr)
+                    diag_var = Variable(var.shape[0], var_id=var.id, **new_attr, name=var.name() + "_red")
                     diag_var.set_variable_of_provenance(var)
                     id2new_var[var.id] = diag_var
                     obj = diag(diag_var)
                 elif new_var:
-                    obj = Variable(var.shape, var_id=var.id, **new_attr)
+                    obj = Variable(var.shape, var_id=var.id, **new_attr, name=var.name() + "_red")
                     obj.set_variable_of_provenance(var)
                     id2new_var[var.id] = obj
                 else:

@@ -96,6 +96,38 @@ def extract_mip_idx(variables) -> Tuple[List[int], List[int]]:
     return boolean_idx, integer_idx
 
 
+def flatten_variable_names(variables) -> List[str]:
+    """
+    Flattens a two-dimensional variable into a list of string names with the Fortran ordering.
+
+    Parameters:
+        variable_name (str): The name of the variable.
+        variable_shape (Tuple[int, int]): The shape of the variable.
+
+    Returns:
+        List[str]: A list of strings representing the variable names with their indices.
+    """
+    # Create a list to store the flattened variable names
+    flattened_names = []
+
+    for x in variables:
+        variable_name = str(x)
+
+        # Iterate over each index in the shape using Fortran order
+        for index in np.ndindex(x.shape):
+            # Convert 0-based index to 1-based for the name representation
+            try:
+                # Convert 0-based index to 1-based for the name representation
+                index_str = ",".join(str(i + 1) for i in index)  # Handle arbitrary dimensions
+                name = f"{variable_name}[{index_str}]"
+            except Exception:
+                name = "unnamed_var"
+
+            flattened_names.append(name)
+
+    return flattened_names
+
+
 class MatrixStuffing(Reduction):
     """Stuffs a problem into a standard form for a family of solvers."""
 
